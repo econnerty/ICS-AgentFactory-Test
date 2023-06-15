@@ -11,9 +11,9 @@ import params
 from tqdm.auto import tqdm
 import random
 
-
 import csv
 
+#Code to generate a basic agent file
 def generate_basic_agent_file(filename, num_records):
     headers = ['id', 'type', 'country', 'county', 'municipality', 'latitude', 'longitude', 'gender', 'age', 'language', 'nationality', 'political_spectrum', 'socioeconomic_status', 'eu', 'nato_donovia', 'soldier_type', 'triad_stack_id', 'simulation_id']
     
@@ -59,7 +59,8 @@ def generate_basic_agent_file(filename, num_records):
                 ''  # simulation_id
             ]
             writer.writerow(row)
-            
+
+#Code to create some info sources   
 def generate_info_source_file(filename, num_records):
     headers = ['id', 'type', 'source']
     
@@ -81,6 +82,7 @@ def generate_info_source_file(filename, num_records):
             writer.writerow(row)
 
 
+#Code to create a random adjacency matrix
 def generate_adjacency_matrix(filename, num_agents, num_sources):
     # Generate IDs for agents and info sources
     agent_ids = [f'B-ID-{i}' for i in range(1, num_agents + 1)]
