@@ -112,6 +112,29 @@ def generate_adjacency_matrix(filename, num_agents, num_sources, connectivity_le
         for i, row in enumerate(matrix):
             writer.writerow([agent_ids[i] if i < num_agents else source_ids[i - num_agents]] + row)
 
+def generate_information_packets(filename, num_records, avg_sentiment, num_topics):
+    headers = ['Type', 'Document ID', 'Information Source ID', 'Topic ID', 'IP-id', 'Stance']
+    types = ['IPs']
+    sources = ['delfi.lt', 'vz.lt', 'lrt.lt', 'sputniknews.com', 'lenta.ru']
+    all_topics = ['International response to Donovian invasion', 'Lithuanian response to Donovian invasion', 'Humanitarian aid by NATO', 'Censorship of media by Donovia', 'Donovian military activity in Lithuania', 'Donovian invasion of Lithuania', 'Civil protests against Donovia', 'IDPs migrate as a result of war', 'NATO shelter in place messaging', 'Article 5 invoked by NATO', 'Criminal activity in Lithuania']
+    topics = random.sample(all_topics, num_topics)
+    stances = list(np.random.normal(avg_sentiment, 1, num_records)) # generate stances with normal distribution around avg_sentiment
+
+    with open(filename, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(headers)
+        
+        for i in range(1, num_records + 1):
+            row = [
+                types[0],
+                521500 + i,
+                random.choice(sources),
+                random.choice(topics),
+                80 + i,
+                round(stances[i-1]) # round to nearest integer
+            ]
+            writer.writerow(row)
+
 
 # Generate a source file with 4 records
 generate_info_source_file('./test-files/InfoDissAgents.csv', params.NUM_OF_INFO_SOURCES)
@@ -121,3 +144,6 @@ generate_basic_agent_file('./test-files/basicAgentsInput.csv', params.NUM_OF_AGE
 
 # Generate an adjacency matrix with 10 agents and 4 info sources, 50% connectivity level, and 0.5 trust threshold
 generate_adjacency_matrix('./test-files/adjacency_matrix.csv', params.NUM_OF_AGENTS, params.NUM_OF_INFO_SOURCES, params.CONNECTIVITY_LEVEL, params.TRUST_THRESHOLD)
+
+# Generate a CSV file with 10 packets, average sentiment of 0, and 2 unique topics
+generate_information_packets('./test-files/IPsInput_tick_1.csv', params.NUM_OF_PACKETS, params.AVERAGE_SENTIMENT, params.UNIQUE_TOPICS)
