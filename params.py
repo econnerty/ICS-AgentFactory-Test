@@ -1,3 +1,4 @@
+#For agents and info sources
 NUM_OF_AGENTS = 10
 NUM_OF_INFO_SOURCES = 10
 CONNECTIVITY_LEVEL = 0.1
