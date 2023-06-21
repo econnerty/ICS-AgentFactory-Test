@@ -80,7 +80,7 @@ def generate_info_source_file(filename, num_records):
             writer.writerow(row)
 
 #Code to create an adjacency matrix
-def generate_adjacency_matrix(filename, num_agents, num_sources, connectivity_level, trust_threshold):
+def generate_adjacency_matrix(filename, num_agents, num_sources, connectivity_level, trust_threshold,trust_stddev=0.1):
     # Generate IDs for agents and info sources
     agent_ids = [f'B-ID-{i}' for i in range(1, num_agents + 1)]
     source_ids = [f'test{i}' for i in range(1, num_sources + 1)]
@@ -91,14 +91,19 @@ def generate_adjacency_matrix(filename, num_agents, num_sources, connectivity_le
     # Fill in the agent-to-agent connections
     for i in range(num_agents):
         for j in range(i+1, num_agents):
-            trust_score = round(random.random(), 2)
-            matrix[i][j] = matrix[j][i] = trust_score if trust_score > trust_threshold else 0
+            trust_score = np.random.normal(trust_threshold, trust_stddev)
+            trust_score = min(max(trust_score, 0), 1)  # clip the trust score to the 0-1 range
+            trust_score = round(trust_score, 2)  # round to two decimal places
+            matrix[i][j] = matrix[j][i] = trust_score
     
     # Fill in the agent-to-source and source-to-agent connections
     for i in range(num_agents):
         for j in range(num_agents, num_agents + num_sources):
-            connection = 1 if random.random() < connectivity_level else 0
-            matrix[i][j] = matrix[j][i] = connection
+            if random.random() <= connectivity_level:
+                connection_score = 1 
+            else:
+                connection_score = 0
+            matrix[i][j] = matrix[j][i] = connection_score
     
     with open(filename, 'w', newline='') as f:
         writer = csv.writer(f, delimiter=',')
@@ -141,7 +146,7 @@ generate_info_source_file('./test-files/InfoDissAgents.csv', params.NUM_OF_INFO_
 generate_basic_agent_file('./test-files/basicAgentsInput.csv', params.NUM_OF_AGENTS)
 
 # Generate an adjacency matrix with 10 agents and 4 info sources, 50% connectivity level, and 0.5 trust threshold
-generate_adjacency_matrix('./test-files/adjacency_matrix.csv', params.NUM_OF_AGENTS, params.NUM_OF_INFO_SOURCES, params.CONNECTIVITY_LEVEL, params.TRUST_THRESHOLD)
+generate_adjacency_matrix('./test-files/adjacency_matrix.csv', params.NUM_OF_AGENTS, params.NUM_OF_INFO_SOURCES, params.CONNECTIVITY_LEVEL, params.TRUST_THRESHOLD,params.TRUST_STD_DEV)
 
 # Generate a CSV file with 10 packets, average sentiment of 0, and 2 unique topics
 generate_information_packets('./test-files/IPsInput_tick_1.csv', params.NUM_OF_PACKETS, params.AVERAGE_SENTIMENT, params.UNIQUE_TOPICS)
