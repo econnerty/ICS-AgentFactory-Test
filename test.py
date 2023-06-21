@@ -5,10 +5,7 @@
 #Date: 6/14/2023
 #For the USC AI - Institute
 
-import pandas as pd
-import numpy as np
 import params
-from tqdm.auto import tqdm
 import random
 
 import csv
@@ -18,10 +15,10 @@ def generate_basic_agent_file(filename, num_records):
     headers = ['id', 'type', 'country', 'county', 'municipality', 'latitude', 'longitude', 'gender', 'age', 'language', 'nationality', 'political_spectrum', 'socioeconomic_status', 'eu', 'nato_donovia', 'soldier_type', 'triad_stack_id', 'simulation_id']
     
     # Define some sample data for each field
-    types = ['donovian']
+    types = ['basic']
     countries = ['belarus']
     counties = ['vitebsk', 'oshmyany']
-    municipalities = ['33_dtg', '52_dtg']
+    municipalities = ['elektrenai', 'dofolsky']
     latitudes = [55.168346, 54.553097]
     longitudes = [27.627179, 26.047517]
     genders = ['male', 'female']
@@ -31,8 +28,8 @@ def generate_basic_agent_file(filename, num_records):
     political_spectrums = ['center', 'right', 'left']
     socioeconomic_statuses = ['lower_class', 'middle_class', 'upper_class']
     eus = ['anti_eu']
-    nato_donovias = ['anti_nato_pro_donovia']
-    soldier_types = ['conscript_soldier', 'contract_nco']
+    nato_donovias = ['proNato']
+    soldier_types = ['none']
     
     with open(filename, 'w', newline='') as f:
         writer = csv.writer(f, delimiter='~')
